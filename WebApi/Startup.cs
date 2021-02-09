@@ -14,9 +14,12 @@ namespace WebApi
     public class Startup
     {
         public IConfiguration _config { get; }
-        public Startup(IConfiguration configuration)
+        public IWebHostEnvironment _env { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _config = configuration;
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -26,7 +29,7 @@ namespace WebApi
             services.AddCorsService("MyCorsPolicy");
             services.AddApplicationLayer();
             services.AddPersistenceInfrastructure(_config);
-            services.AddIdentityInfrastructure(_config);
+            services.AddIdentityInfrastructure(_config, _env);
             services.AddSharedInfrastructure(_config);
             services.AddControllers()
                 .AddNewtonsoftJson();
@@ -59,7 +62,7 @@ namespace WebApi
             app.UseErrorHandlingMiddleware();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/api/health");
+                //endpoints.MapHealthChecks("/api/health");
                 endpoints.MapControllers();
             });
 

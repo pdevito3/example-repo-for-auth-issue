@@ -12,13 +12,17 @@ namespace WebApi
     using WebApi.Extensions;
     using Serilog;
     using Infrastructure.Identity;
+    using Autofac;
 
     public class StartupDevelopment
     {
         public IConfiguration _config { get; }
-        public StartupDevelopment(IConfiguration configuration)
+        public IWebHostEnvironment _env { get; }
+
+        public StartupDevelopment(IConfiguration configuration, IWebHostEnvironment env)
         {
             _config = configuration;
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -28,7 +32,7 @@ namespace WebApi
             services.AddCorsService("MyCorsPolicy");
             services.AddApplicationLayer();
             services.AddPersistenceInfrastructure(_config);
-            services.AddIdentityInfrastructure(_config);
+            services.AddIdentityInfrastructure(_config, _env);
             services.AddSharedInfrastructure(_config);
             services.AddControllers()
                 .AddNewtonsoftJson();
