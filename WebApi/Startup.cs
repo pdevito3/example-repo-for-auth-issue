@@ -62,7 +62,7 @@ namespace WebApi
             app.UseErrorHandlingMiddleware();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapHealthChecks("/api/health");
+                endpoints.MapHealthChecks("/api/health");
                 endpoints.MapControllers();
             });
 

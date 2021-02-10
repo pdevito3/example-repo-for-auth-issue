@@ -17,6 +17,7 @@ namespace Lab.Api.Tests.IntegrationTests.Patient
     using System.Net;
     using System.Dynamic;
     using System;
+    using Lab.Api.Tests.Helpers;
 
     [Collection("Sequential")]
     public class GetPatientIntegrationTests : IClassFixture<CustomWebApplicationFactory>
@@ -51,10 +52,7 @@ namespace Lab.Api.Tests.IntegrationTests.Patient
                 AllowAutoRedirect = false
             });
 
-            dynamic data = new ExpandoObject();
-            data.sub = Guid.NewGuid();
-            data.scope = new[] { "patients.read", "openid", "profile" };
-            client.SetFakeBearerToken((object)data);
+            client.AddAuth(new[] { "patients.read", "openid", "profile" });
 
             var result = await client.GetAsync("api/Patients")
                 .ConfigureAwait(false);
@@ -122,10 +120,7 @@ namespace Lab.Api.Tests.IntegrationTests.Patient
                 AllowAutoRedirect = false
             });
 
-            dynamic data = new ExpandoObject();
-            data.sub = Guid.NewGuid();
-            data.scope = new[] { "" };
-            client.SetFakeBearerToken((object)data);
+            client.AddAuth(new[] { "" });
 
             var result = await client.GetAsync("api/Patients")
                 .ConfigureAwait(false);

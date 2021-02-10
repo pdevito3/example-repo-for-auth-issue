@@ -26,12 +26,11 @@ namespace Lab.Api.Tests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseEnvironment("Testing");
+            builder.UseEnvironment("IntegrationTesting");
 
             builder.ConfigureServices(async services =>
             {
-                services.AddEntityFrameworkInMemoryDatabase();
-
+                // add authentication using a fake jwt bearer
                 services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
@@ -39,9 +38,7 @@ namespace Lab.Api.Tests
                 }).AddFakeJwtBearer();
 
                 // Create a new service provider.
-                var provider = services
-                    .AddEntityFrameworkInMemoryDatabase()
-                    .BuildServiceProvider();
+                var provider = services.BuildServiceProvider();
 
                 // Add a database context (LabDbContext) using an in-memory 
                 // database for testing.

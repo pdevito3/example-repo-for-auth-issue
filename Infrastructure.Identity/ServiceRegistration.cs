@@ -9,7 +9,7 @@ namespace Infrastructure.Identity
     {
         public static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
-            if(env.EnvironmentName != "Testing")
+            if(env.EnvironmentName != "IntegrationTesting")
             {
                 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>

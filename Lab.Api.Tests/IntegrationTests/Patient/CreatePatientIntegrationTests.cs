@@ -12,6 +12,9 @@ namespace Lab.Api.Tests.IntegrationTests.Patient
     using WebApi;
     using System.Collections.Generic;
     using Application.Wrappers;
+    using System.Dynamic;
+    using System;
+    using System.Net;
 
     [Collection("Sequential")]
     public class CreatePatientIntegrationTests : IClassFixture<CustomWebApplicationFactory>
@@ -33,6 +36,11 @@ namespace Lab.Api.Tests.IntegrationTests.Patient
                 AllowAutoRedirect = false
             });
             var fakePatient = new FakePatientDto().Generate();
+
+            dynamic data = new ExpandoObject();
+            data.sub = Guid.NewGuid();
+            data.scope = new[] { "patients.add" };
+            client.SetFakeBearerToken((object)data);
 
             // Act
             var httpResponse = await client.PostAsJsonAsync("api/Patients", fakePatient)
